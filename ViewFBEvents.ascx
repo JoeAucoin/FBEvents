@@ -44,7 +44,7 @@
 
 </style>
 
-<ul id="navFBEvents1">
+<ul id="navFBEvents">
    
     <li><asp:HyperLink ID="HyperLink5" runat="server">UserSchedule</asp:HyperLink></li>
     <li><asp:HyperLink ID="HyperLink4" runat="server">ContactShift</asp:HyperLink></li>
@@ -53,4 +53,3 @@
 
 </ul>
 
-<p>-----</p>

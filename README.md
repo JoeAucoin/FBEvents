@@ -13,8 +13,6 @@ Volunteer Scheduling Module Features:
   - Shift Shortage Report - See what shifts need filling
   - Manage Registered Users Schedule
 
-  [I'm an inline-style link](https://www.google.com)
-
   [Contact developer with any questions or enhancement requests](https://www.gibs.com/Contact)
 
   Visit working demo - [http://www.dnnfoodbank.com/Scheduling/Schedule-Manager]
