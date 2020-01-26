@@ -593,7 +593,7 @@ SET DATEFORMAT mdy;
 		,u.[FirstName]
 		,u.[LastName]
 
-		,u.[LowerEmail] AS VolunteerEmail
+		,u.[Email] AS VolunteerEmail
 		,u.[DisplayName] AS VolunteerName
 		,up3.PropertyValue AS [PrimaryTelephone]
 		,up2.PropertyValue AS [PrimaryJob]

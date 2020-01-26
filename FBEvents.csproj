@@ -165,6 +165,8 @@
     <Content Include="Documentation\logo.gif" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="BuildScripts\ModulePackage.targets" />
+    <Content Include="BuildScripts\MSBuild.Community.Tasks.Targets" />
     <None Include="packages.config" />
     <Content Include="README.md" />
     <None Include="SqlScripts\01.00.00.SqlDataProvider" />
