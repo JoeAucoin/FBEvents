@@ -1,0 +1,93 @@
+﻿/************************************************************/
+/*****              SqlDataProvider                     *****/
+/*****                                                  *****/
+/*****                                                  *****/
+/***** Note: To manually execute this script you must   *****/
+/*****       perform a search and replace operation     *****/
+/*****       for {databaseOwner} and {objectQualifier}  *****/
+/*****                                                  *****/
+/************************************************************/
+
+
+
+
+/****** Object:  StoredProcedure [dbo].GIBS_Events_AddPropertyDefinition   Script Date: 09/27/2014 07:34:14 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[GIBS_Events_AddPropertyDefinition]
+	@PortalId int,	
+	@PropertyCategory nvarchar(50),
+	@PropertyName nvarchar(50)
+
+
+AS
+	DECLARE @PropertyDefinitionId int
+
+
+	SELECT @PropertyDefinitionId = PropertyDefinitionId
+		FROM   dbo.ProfilePropertyDefinition
+		WHERE  (PortalId = @PortalId OR (PortalId IS NULL AND @PortalId IS NULL))
+			AND PropertyName = @PropertyName
+			
+	DECLARE @DataType int
+	SELECT @DataType =   EntryID
+		FROM         Lists
+		WHERE     (ListName = 'DataType') AND (Value = 'Text')
+			
+
+	IF @PropertyDefinitionId IS NULL
+		BEGIN
+			INSERT dbo.ProfilePropertyDefinition	(
+					PortalId,
+					ModuleDefId,
+					Deleted,
+					DataType,
+					
+					PropertyCategory,
+					PropertyName,
+					ReadOnly,
+					Required,
+					ViewOrder,
+					Visible,
+					Length,
+                    DefaultVisibility,
+					[CreatedByUserID],
+					[CreatedOnDate],
+					[LastModifiedByUserID],
+					[LastModifiedOnDate]
+
+				)
+				VALUES	(
+					@PortalId,
+					-1,
+					0,
+					@DataType,
+					
+					@PropertyCategory,
+					@PropertyName,
+					0,
+					0,
+					1,
+					1,
+					50,
+                    2,
+					1,
+  					getdate(),
+  					1,
+  					getdate()
+				)
+			SELECT @PropertyDefinitionId = SCOPE_IDENTITY()
+			
+			END
+			
+		ELSE
+			BEGIN
+			SELECT @PropertyDefinitionId = -1
+		END		
+
+		
+SELECT @PropertyDefinitionId
+
+

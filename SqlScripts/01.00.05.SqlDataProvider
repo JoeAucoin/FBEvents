@@ -1,0 +1,784 @@
+﻿/************************************************************/
+/*****              SqlDataProvider                     *****/
+/*****                                                  *****/
+/*****                                                  *****/
+/***** Note: To manually execute this script you must   *****/
+/*****       perform a search and replace operation     *****/
+/*****       for {databaseOwner} and {objectQualifier}  *****/
+/*****                                                  *****/
+/************************************************************/
+
+
+
+
+/****** Object:  StoredProcedure [dbo].[GIBS_Events_AddSignup]    Script Date: 08/10/2014 08:19:01 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GIBS_Events_AddSignup]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[GIBS_Events_AddSignup]
+GO
+
+/****** Object:  StoredProcedure [dbo].[GIBS_Events_DeleteSignup]    Script Date: 08/10/2014 08:19:01 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GIBS_Events_DeleteSignup]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[GIBS_Events_DeleteSignup]
+GO
+
+/****** Object:  StoredProcedure [dbo].[GIBS_Events_GetAvailableShifts]    Script Date: 08/10/2014 08:19:01 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GIBS_Events_GetAvailableShifts]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[GIBS_Events_GetAvailableShifts]
+GO
+
+/****** Object:  StoredProcedure [dbo].[GIBS_Events_GetAvailableSignups]    Script Date: 08/10/2014 08:19:01 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GIBS_Events_GetAvailableSignups]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[GIBS_Events_GetAvailableSignups]
+GO
+
+/****** Object:  StoredProcedure [dbo].[GIBS_Events_GetDistinctShifts]    Script Date: 08/10/2014 08:19:01 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GIBS_Events_GetDistinctShifts]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[GIBS_Events_GetDistinctShifts]
+GO
+
+/****** Object:  StoredProcedure [dbo].[GIBS_Events_GetEventSignups]    Script Date: 08/10/2014 08:19:01 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GIBS_Events_GetEventSignups]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[GIBS_Events_GetEventSignups]
+GO
+
+/****** Object:  StoredProcedure [dbo].[GIBS_Events_GetRolesByGroupID]    Script Date: 08/10/2014 08:19:01 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GIBS_Events_GetRolesByGroupID]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[GIBS_Events_GetRolesByGroupID]
+GO
+
+/****** Object:  StoredProcedure [dbo].[GIBS_Events_GetUsersByRoleName]    Script Date: 08/10/2014 08:19:01 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GIBS_Events_GetUsersByRoleName]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[GIBS_Events_GetUsersByRoleName]
+GO
+
+/****** Object:  StoredProcedure [dbo].[GIBS_Events_GetUserSignups]    Script Date: 08/10/2014 08:19:01 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GIBS_Events_GetUserSignups]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[GIBS_Events_GetUserSignups]
+GO
+
+/****** Object:  StoredProcedure [dbo].[GIBS_Events_GetVolunteerInfo]    Script Date: 08/10/2014 08:19:01 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GIBS_Events_GetVolunteerInfo]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[GIBS_Events_GetVolunteerInfo]
+GO
+
+/****** Object:  StoredProcedure [dbo].[GIBS_EventsSignupsGetAllEvents]    Script Date: 08/10/2014 08:19:01 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GIBS_EventsSignupsGetAllEvents]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[GIBS_EventsSignupsGetAllEvents]
+GO
+
+/****** Object:  StoredProcedure [dbo].[GIBS_EventsSignupsGetAllEventsShortages]    Script Date: 08/10/2014 08:19:01 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GIBS_EventsSignupsGetAllEventsShortages]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[GIBS_EventsSignupsGetAllEventsShortages]
+GO
+
+
+
+/****** Object:  StoredProcedure [dbo].[GIBS_Events_AddSignup]    Script Date: 08/10/2014 08:19:01 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+/*** EventsSignupsSave ***/
+
+CREATE PROCEDURE [dbo].[GIBS_Events_AddSignup]
+(
+    @EventID int,  
+    @ModuleID int, 
+    @UserID int
+
+)
+AS
+BEGIN
+SET NOCOUNT ON;
+SET DATEFORMAT mdy;
+
+
+IF NOT EXISTS(SELECT * FROM EventsSignups WHERE EventID = @EventID AND UserID = @UserID)
+    BEGIN
+	   INSERT dbo.[EventsSignups]
+		(
+			EventID,
+			ModuleID,
+			UserID,
+			Approved, 
+			PayPalPaymentDate, 
+			PayPalAmount, 
+			PayPalFee,
+			NoEnrolees
+		)
+		VALUES
+		(
+			@EventID,
+			@ModuleID,
+			@UserID,
+			1,
+			Getdate(), 
+			0, 
+			0,
+			1
+		)
+    END
+
+
+
+ 
+
+
+END
+GO
+
+/****** Object:  StoredProcedure [dbo].[GIBS_Events_DeleteSignup]    Script Date: 08/10/2014 08:19:01 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+
+ CREATE procedure [dbo].[GIBS_Events_DeleteSignup]
+
+	
+	@SignupID int
+
+as
+
+BEGIN	
+
+DELETE FROM EventsSignups where SignupID = @SignupID
+
+
+END
+GO
+
+/****** Object:  StoredProcedure [dbo].[GIBS_Events_GetAvailableShifts]    Script Date: 08/10/2014 08:19:01 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+
+/*** EventsSignupsGetEvent ***/
+
+CREATE PROCEDURE [dbo].[GIBS_Events_GetAvailableShifts]
+(
+    
+    @ModuleID int,
+    @PortalID int,
+    @StartDate date,
+    @EndDate date,
+    @UserID int
+)
+AS
+BEGIN
+SET NOCOUNT ON;
+SET DATEFORMAT mdy;
+
+SELECT c.EventID,
+      
+    datename(dw,c.EventTimeBegin) as [ShiftDayOfWeek],
+  CONVERT(VARCHAR(10), c.EventTimeBegin, 101) as [ShiftDate], 
+  c.EventTimeBegin AS ShiftDateTime,
+  substring(convert(varchar(20), c.EventTimeBegin, 9), 13, 5) 
++ ' ' + substring(convert(varchar(30), c.EventTimeBegin, 9), 25, 2)as ShiftStartTime,
+
+ -- SELECT CONVERT(VARCHAR(23), c.EventTimeBegin, 126) as StartTime,
+  
+   c.EventName + ' - ' +
+  datename(dw,c.EventTimeBegin) + ', ' + 
+  CONVERT(VARCHAR(10), c.EventTimeBegin, 101) + ' at' +  
+  
+  substring(convert(varchar(20), c.EventTimeBegin, 9), 13, 5) 
++ ' ' + substring(convert(varchar(30), c.EventTimeBegin, 9), 25, 2)   
+
+  as [ShiftName],
+  
+  
+  (cast(c.Duration as float) / 60) As Duration,
+
+  
+ -- c.Importance,
+ -- c.Approved as EventApproved,
+  c.MaxEnrollment as MaxEnrollment,
+  coalesce((Select Sum(NoEnrolees) from dbo.EventsSignups WHERE EventID = c.EventID and c.Signups = 1),0) as Enrolled
+    
+      
+  FROM [dbo].[Events] c 
+  
+  Where c.MaxEnrollment > coalesce((Select Sum(NoEnrolees) from dbo.EventsSignups WHERE EventID = c.EventID and c.Signups = 1),0) 
+--  AND 
+--  (CONVERT(VARCHAR(10), c.EventTimeBegin, 101)  
+--between CONVERT(VARCHAR(10), @StartDate, 101) And CONVERT(VARCHAR(10), @EndDate, 101)
+--)
+
+AND (  c.EventTimeBegin  
+between @StartDate and @EndDate)
+
+
+
+AND (not exists (Select UserID from dbo.EventsSignups WHERE EventID = c.EventID and UserID = @UserID))
+order by c.EventTimeBegin
+ 
+END
+
+GO
+
+/****** Object:  StoredProcedure [dbo].[GIBS_Events_GetAvailableSignups]    Script Date: 08/10/2014 08:19:01 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+
+/*** EventsSignupsGetEvent ***/
+
+CREATE PROCEDURE [dbo].[GIBS_Events_GetAvailableSignups]
+(
+    
+    @ModuleID int,
+    @ShiftName varchar(50),
+    @ShiftDayOfWeek varchar(10) = '',
+    @StartDate date,
+    @EndDate date,
+    @UserID int
+)
+AS
+BEGIN
+SET NOCOUNT ON;
+SET DATEFORMAT mdy;
+
+
+select   
+c.EventID,
+c.EventName as ShiftName,
+datename(dw,c.EventTimeBegin) as [ShiftDayOfWeek],
+  CONVERT(VARCHAR(10), c.EventTimeBegin, 101) as [ShiftDate], 
+  c.EventTimeBegin AS ShiftDateTime,
+  substring(convert(varchar(20), c.EventTimeBegin, 9), 13, 5) 
++ ' ' + substring(convert(varchar(30), c.EventTimeBegin, 9), 25, 2)as ShiftStartTime
+,(cast(c.Duration as float) / 60) As Duration
+
+,  c.MaxEnrollment as MaxEnrollment,
+  coalesce((Select Sum(NoEnrolees) from dbo.EventsSignups WHERE EventID = c.EventID and c.Signups = 1),0) as Enrolled
+    
+
+from dbo.events as c 
+
+WHERE 
+	
+	--(CONVERT(VARCHAR(10), c.EventTimeBegin, 101)  
+	--between CONVERT(VARCHAR(10), @StartDate, 101) And CONVERT(VARCHAR(10), @EndDate, 101)
+	--)
+	
+	(c.EventTimeBegin between @StartDate and @EndDate)
+	
+	AND EventName = @ShiftName
+	AND (datename(dw,c.EventTimeBegin) = @ShiftDayOfWeek or @ShiftDayOfWeek = '')
+	AND c.ModuleID = @ModuleID
+	AND (coalesce((Select Sum(NoEnrolees) from dbo.EventsSignups WHERE EventID = c.EventID and c.Signups = 1),0) < c.MaxEnrollment)
+
+ORDER BY ShiftDateTime
+
+
+END
+
+GO
+
+/****** Object:  StoredProcedure [dbo].[GIBS_Events_GetDistinctShifts]    Script Date: 08/10/2014 08:19:01 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+
+/*** EventsSignupsGetEvent ***/
+
+CREATE PROCEDURE [dbo].[GIBS_Events_GetDistinctShifts]
+(
+    
+    @ModuleID int,
+    @StartDate date,
+    @EndDate date
+)
+AS
+BEGIN
+SET NOCOUNT ON;
+SET DATEFORMAT mdy;
+
+
+select  Distinct  
+e.EventName AS ShiftName
+from dbo.events as e 
+
+WHERE 
+	
+	(e.EventTimeBegin between @StartDate and @EndDate)
+	
+	AND e.ModuleID = @ModuleID
+	AND (coalesce((Select Sum(NoEnrolees) from dbo.EventsSignups WHERE EventID = e.EventID and e.Signups = 1),0) < e.MaxEnrollment)
+
+ORDER BY EventName
+
+
+END
+
+GO
+
+/****** Object:  StoredProcedure [dbo].[GIBS_Events_GetEventSignups]    Script Date: 08/10/2014 08:19:01 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+/*** EventsSignupsGetEvent ***/
+
+CREATE PROCEDURE [dbo].[GIBS_Events_GetEventSignups]
+(
+    @EventID int,
+    @ModuleID int,
+    @PortalID int
+)
+AS
+BEGIN
+SET NOCOUNT ON;
+SET DATEFORMAT mdy;
+
+Select Distinct s.EventID, 
+	s.SignupID, 
+	s.ModuleID, 
+	s.Userid, s.Approved,
+  --u.FirstName + ' ' + u.LastName as UserName,
+  u.DisplayName as volunteerName, 
+  u.Email as volunteerEmail,
+  c.EventTimeBegin as shiftDateTime,
+    datename(dw,c.EventTimeBegin) as [ShiftDayOfWeek],
+  CONVERT(VARCHAR(10), c.EventTimeBegin, 101) as [ShiftDate], 
+  substring(convert(varchar(20), c.EventTimeBegin, 9), 13, 5) 
++ ' ' + substring(convert(varchar(30), c.EventTimeBegin, 9), 25, 2)as ShiftStartTime,
+  c.Duration,
+  c.EventName as shiftName,
+--  c.Importance,
+  c.Approved as EventApproved,
+   up2.PropertyValue AS [PrimaryJob],
+   up3.PropertyValue AS [PrimaryTelephone],
+  
+  CASE WHEN c.MaxEnrollment = coalesce((Select Sum(NoEnrolees) from dbo.EventsSignups WHERE EventID = c.EventID and c.Signups = 1),0)
+   THEN 'true' ELSE 'false' END AS FullEnrollment,
+  
+  (Select Sum(NoEnrolees) from dbo.EventsSignups WHERE EventID = c.EventID and c.Signups = 1) as Enrolled,
+	c.MaxEnrollment as maxEnrollment
+ --       NoEnrolees,
+ --       r.EventTimeZoneId
+        
+FROM dbo.EventsRecurMaster AS r RIGHT OUTER JOIN
+     dbo.Events AS c ON r.RecurMasterID = c.RecurMasterID RIGHT OUTER JOIN
+     dbo.EventsSignups AS s LEFT OUTER JOIN
+     dbo.Users AS u ON s.UserID = u.UserID ON c.EventID = s.EventID LEFT OUTER JOIN
+     dbo.EventsMaster AS m ON s.ModuleID = m.SubEventID
+     
+	LEFT OUTER JOIN
+	(SELECT     up.UserID, up.PropertyValue
+	FROM          UserProfile AS up INNER JOIN
+			   ProfilePropertyDefinition AS ppd ON up.PropertyDefinitionID = ppd.PropertyDefinitionID 
+			   AND ppd.PropertyName = 'PrimaryJob' AND ppd.PortalID = @PortalID) 
+	AS up2 ON s.UserID = up2.UserID 
+	
+	LEFT OUTER JOIN
+	(SELECT     up.UserID, up.PropertyValue
+	FROM          UserProfile AS up INNER JOIN
+	   ProfilePropertyDefinition AS ppd ON up.PropertyDefinitionID = ppd.PropertyDefinitionID 
+	   AND ppd.PropertyName = 'Telephone' AND ppd.PortalID = @PortalID) 
+	AS up3 ON s.UserID = up3.UserID 		
+     
+Where  s.EventID = @EventID And
+       (s.ModuleID = @ModuleID Or m.ModuleID = @ModuleID)
+ORDER BY c.EventTimeBegin, c.EventName, volunteerEmail
+END
+GO
+
+/****** Object:  StoredProcedure [dbo].[GIBS_Events_GetRolesByGroupID]    Script Date: 08/10/2014 08:19:01 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+
+
+/*** EventsSignupsGetEvent ***/
+
+CREATE PROCEDURE [dbo].[GIBS_Events_GetRolesByGroupID]
+(
+    
+    @RoleGroupID int
+)
+AS
+BEGIN
+SET NOCOUNT ON;
+SET DATEFORMAT mdy;
+
+
+SELECT R.*,
+          (SELECT COUNT(*) FROM dbo.[UserRoles] U WHERE U.RoleID = R.RoleID) AS UserCount
+     FROM dbo.[Roles] AS R
+     WHERE RoleID >= 0 and R.RoleGroupID = @RoleGroupID
+
+
+
+END
+
+
+GO
+
+/****** Object:  StoredProcedure [dbo].[GIBS_Events_GetUsersByRoleName]    Script Date: 08/10/2014 08:19:01 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+
+CREATE PROCEDURE [dbo].[GIBS_Events_GetUsersByRoleName]
+	@PortalID	int,
+	@Rolename	nvarchar(50)
+AS
+	SELECT     
+		
+		U.UserID as UserID, 
+		 U.LastName + ', ' + U.FirstName AS VolunteerName,
+		 U.Email,
+		 up3.PropertyValue AS [PrimaryTelephone]
+		
+	FROM dbo.UserPortals AS UP 
+			RIGHT OUTER JOIN dbo.UserRoles  UR 
+			INNER JOIN dbo.Roles R ON UR.RoleID = R.RoleID 
+			RIGHT OUTER JOIN dbo.Users AS U ON UR.UserID = U.UserID 
+		ON UP.UserId = U.UserID	
+		
+				LEFT OUTER JOIN
+		(SELECT     up.UserID, up.PropertyValue
+		FROM          UserProfile AS up INNER JOIN
+							   ProfilePropertyDefinition AS ppd ON up.PropertyDefinitionID = ppd.PropertyDefinitionID 
+							   AND ppd.PropertyName = 'Telephone' AND ppd.PortalID = @PortalID) 
+		AS up3 ON u.UserID = up3.UserID 
+		
+	WHERE ( UP.PortalId = @PortalID OR @PortalID IS Null )
+		AND (UP.IsDeleted = 0 OR UP.IsDeleted Is NULL)
+		AND (R.RoleName = @Rolename)
+		AND (R.PortalId = @PortalID OR @PortalID IS Null )
+	--ORDER BY U.FirstName + ' ' + U.LastName
+	ORDER BY U.LastName + ' ' + U.FirstName
+GO
+
+/****** Object:  StoredProcedure [dbo].[GIBS_Events_GetUserSignups]    Script Date: 08/10/2014 08:19:01 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+
+/*** EventsSignupsGetEvent ***/
+
+CREATE PROCEDURE [dbo].[GIBS_Events_GetUserSignups]
+(
+    
+    @ModuleID int,
+    @PortalID int,
+    @StartDate date,
+    @EndDate date,
+    @UserID int
+)
+AS
+BEGIN
+SET NOCOUNT ON;
+SET DATEFORMAT mdy;
+
+Select 
+--Distinct 
+
+s.EventID, 
+s.SignupID, 
+--s.ModuleID, 
+s.Userid as UserID, 
+--s.Approved,
+  --u.FirstName + ' ' + u.LastName as UserName,
+  
+  datename(dw,c.EventTimeBegin) as [ShiftDayOfWeek],
+  CONVERT(VARCHAR(10), c.EventTimeBegin, 101) as [ShiftDate], 
+  c.EventTimeBegin AS ShiftDateTime,
+  substring(convert(varchar(20), c.EventTimeBegin, 9), 13, 5) 
++ ' ' + substring(convert(varchar(30), c.EventTimeBegin, 9), 25, 2)as ShiftStartTime,
+
+ -- SELECT CONVERT(VARCHAR(23), c.EventTimeBegin, 126) as StartTime,
+  
+  c.EventName as [ShiftName],
+  (cast(c.Duration as float) / 60) As Duration,
+  u.DisplayName as [VolunteerName], 
+  u.Email as VolunteerEmail,
+  up3.PropertyValue AS [PrimaryTelephone],
+  up2.PropertyValue AS [PrimaryJob],
+  
+ -- c.Importance,
+ -- c.Approved as EventApproved,
+  c.MaxEnrollment as MaxEnrollment,
+  (Select Sum(NoEnrolees) from dbo.EventsSignups WHERE EventID = c.EventID and c.Signups = 1) as Enrolled
+  
+ , CASE WHEN c.EventTimeBegin < GetDate()
+   THEN 'false' ELSE 'true' END AS PastShift 
+  
+
+FROM dbo.EventsRecurMaster AS r RIGHT OUTER JOIN
+     dbo.Events AS c ON r.RecurMasterID = c.RecurMasterID RIGHT OUTER JOIN
+     dbo.EventsSignups AS s LEFT OUTER JOIN
+     dbo.Users AS u ON s.UserID = u.UserID ON c.EventID = s.EventID LEFT OUTER JOIN
+     dbo.EventsMaster AS m ON s.ModuleID = m.SubEventID
+     
+		LEFT OUTER JOIN
+		(SELECT     up.UserID, up.PropertyValue
+		FROM          UserProfile AS up INNER JOIN
+							   ProfilePropertyDefinition AS ppd ON up.PropertyDefinitionID = ppd.PropertyDefinitionID 
+							   AND ppd.PropertyName = 'Telephone' AND ppd.PortalID = @PortalID) 
+		AS up3 ON s.UserID = up3.UserID 
+		
+				LEFT OUTER JOIN
+		(SELECT     up.UserID, up.PropertyValue
+		FROM          UserProfile AS up INNER JOIN
+							   ProfilePropertyDefinition AS ppd ON up.PropertyDefinitionID = ppd.PropertyDefinitionID 
+							   AND ppd.PropertyName = 'PrimaryJob' AND ppd.PortalID = @PortalID) 
+		AS up2 ON s.UserID = up2.UserID 		
+     
+Where 
+(CONVERT(VARCHAR(10), c.EventTimeBegin, 101)  
+between CONVERT(VARCHAR(10), @StartDate, 101) And CONVERT(VARCHAR(10), @EndDate, 101)
+)
+       
+       and
+       (s.ModuleID = @ModuleID Or m.ModuleID = @ModuleID)
+       and s.UserID = @UserID
+ORDER BY c.EventTimeBegin, c.EventName, UserName
+END
+
+GO
+
+/****** Object:  StoredProcedure [dbo].[GIBS_Events_GetVolunteerInfo]    Script Date: 08/10/2014 08:19:01 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+
+/*** EventsSignupsGetEvent ***/
+
+CREATE PROCEDURE [dbo].[GIBS_Events_GetVolunteerInfo]
+(
+
+    @UserID int,
+    @PortalID int
+)
+AS
+BEGIN
+SET NOCOUNT ON;
+SET DATEFORMAT mdy;
+
+
+
+	SELECT u.[UserID]
+		,u.[Username]
+		,u.[FirstName]
+		,u.[LastName]
+
+		,u.[Email] AS VolunteerEmail
+		,u.[DisplayName] AS VolunteerName
+		,up3.PropertyValue AS [PrimaryTelephone]
+		,up2.PropertyValue AS [PrimaryJob]
+
+  FROM [Users] AS u
+  
+  LEFT OUTER JOIN
+		(SELECT     up.UserID, up.PropertyValue
+		FROM          UserProfile AS up INNER JOIN
+							   ProfilePropertyDefinition AS ppd ON up.PropertyDefinitionID = ppd.PropertyDefinitionID 
+							   AND ppd.PropertyName = 'Telephone' AND ppd.PortalID = @PortalID) 
+		AS up3 ON u.UserID = up3.UserID 
+		
+				LEFT OUTER JOIN
+		(SELECT     up.UserID, up.PropertyValue
+		FROM          UserProfile AS up INNER JOIN
+							   ProfilePropertyDefinition AS ppd ON up.PropertyDefinitionID = ppd.PropertyDefinitionID 
+							   AND ppd.PropertyName = 'PrimaryJob' AND ppd.PortalID = @PortalID) 
+		AS up2 ON u.UserID = up2.UserID 
+		
+	WHERE		
+	u.[UserID] = @UserID
+
+
+
+END
+
+GO
+
+/****** Object:  StoredProcedure [dbo].[GIBS_EventsSignupsGetAllEvents]    Script Date: 08/10/2014 08:19:01 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+
+/*** EventsSignupsGetEvent ***/
+
+CREATE PROCEDURE [dbo].[GIBS_EventsSignupsGetAllEvents]
+(
+    
+    @ModuleID int,
+    @PortalID int,
+    @StartDate date,
+    @EndDate date
+)
+AS
+BEGIN
+SET NOCOUNT ON;
+SET DATEFORMAT mdy;
+
+Select 
+--Distinct 
+
+--s.EventID, 
+--s.SignupID, 
+--s.ModuleID, 
+s.Userid as UserID, 
+--s.Approved,
+  --u.FirstName + ' ' + u.LastName as UserName,
+  
+  datename(dw,c.EventTimeBegin) as [ShiftDayOfWeek],
+  CONVERT(VARCHAR(10), c.EventTimeBegin, 101) as [ShiftDate], 
+  c.EventTimeBegin AS ShiftDateTime,
+  substring(convert(varchar(20), c.EventTimeBegin, 9), 13, 5) 
++ ' ' + substring(convert(varchar(30), c.EventTimeBegin, 9), 25, 2)as ShiftStartTime,
+
+ -- SELECT CONVERT(VARCHAR(23), c.EventTimeBegin, 126) as StartTime,
+  
+  c.EventName as [ShiftName],
+  (cast(c.Duration as float) / 60) As Duration,
+  u.DisplayName as [VolunteerName], 
+  u.Email as VolunteerEmail,
+  up3.PropertyValue AS [PrimaryTelephone],
+  up2.PropertyValue AS [PrimaryJob],
+  
+ -- c.Importance,
+ -- c.Approved as EventApproved,
+  c.MaxEnrollment as MaxEnrollment,
+  (Select Sum(NoEnrolees) from dbo.EventsSignups WHERE EventID = c.EventID and c.Signups = 1) as Enrolled
+  
+  ,
+		
+		  CASE WHEN c.MaxEnrollment = coalesce((Select Sum(NoEnrolees) from dbo.EventsSignups WHERE EventID = c.EventID and c.Signups = 1),0)
+   THEN 'true' ELSE 'false' END AS FullEnrollment  	
+
+FROM dbo.EventsRecurMaster AS r RIGHT OUTER JOIN
+     dbo.Events AS c ON r.RecurMasterID = c.RecurMasterID RIGHT OUTER JOIN
+     dbo.EventsSignups AS s LEFT OUTER JOIN
+     dbo.Users AS u ON s.UserID = u.UserID ON c.EventID = s.EventID LEFT OUTER JOIN
+     dbo.EventsMaster AS m ON s.ModuleID = m.SubEventID
+     
+		LEFT OUTER JOIN
+		(SELECT     up.UserID, up.PropertyValue
+		FROM          UserProfile AS up INNER JOIN
+							   ProfilePropertyDefinition AS ppd ON up.PropertyDefinitionID = ppd.PropertyDefinitionID 
+							   AND ppd.PropertyName = 'Telephone' AND ppd.PortalID = @PortalID) 
+		AS up3 ON s.UserID = up3.UserID 
+		
+				LEFT OUTER JOIN
+		(SELECT     up.UserID, up.PropertyValue
+		FROM          UserProfile AS up INNER JOIN
+							   ProfilePropertyDefinition AS ppd ON up.PropertyDefinitionID = ppd.PropertyDefinitionID 
+							   AND ppd.PropertyName = 'PrimaryJob' AND ppd.PortalID = @PortalID) 
+		AS up2 ON s.UserID = up2.UserID 	
+     
+Where 
+(CONVERT(VARCHAR(10), c.EventTimeBegin, 101)  
+between CONVERT(VARCHAR(10), @StartDate, 101) And CONVERT(VARCHAR(10), @EndDate, 101)
+)
+       
+       and
+       (s.ModuleID = @ModuleID Or m.ModuleID = @ModuleID)
+ORDER BY c.EventTimeBegin, c.EventName, UserName
+END
+
+GO
+
+/****** Object:  StoredProcedure [dbo].[GIBS_EventsSignupsGetAllEventsShortages]    Script Date: 08/10/2014 08:19:01 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+
+/*** EventsSignupsGetEvent ***/
+
+CREATE PROCEDURE [dbo].[GIBS_EventsSignupsGetAllEventsShortages]
+(
+    
+    @ModuleID int,
+    @StartDate date,
+    @EndDate date
+)
+AS
+BEGIN
+SET NOCOUNT ON;
+SET DATEFORMAT mdy;
+
+Select 
+  
+  datename(dw,c.EventTimeBegin) as ShiftDayOfWeek,
+  
+    CONVERT(VARCHAR(10), c.EventTimeBegin, 101) as ShiftDate,
+  substring(convert(varchar(20), c.EventTimeBegin, 9), 13, 5) 
++ ' ' + substring(convert(varchar(30), c.EventTimeBegin, 9), 25, 2)as ShiftStartTime,
+  (cast(c.Duration as float) / 60) As Duration,
+  c.EventName as ShiftName,
+  --c.Importance,
+  --c.Approved as EventApproved,
+  c.MaxEnrollment as MaxEnrollment,
+  coalesce((Select Sum(NoEnrolees) from dbo.EventsSignups WHERE EventID = c.EventID and c.Signups = 1),0) as Enrolled,
+  
+  CASE WHEN c.MaxEnrollment = coalesce((Select Sum(NoEnrolees) from dbo.EventsSignups WHERE EventID = c.EventID and c.Signups = 1),0)
+   THEN 'true' ELSE 'false' END AS FullEnrollment
+  
+  
+
+FROM dbo.Events AS c 
+	--RIGHT OUTER JOIN
+ --    dbo.Events AS c ON r.RecurMasterID = c.RecurMasterID 
+ --    RIGHT OUTER JOIN
+ --    dbo.EventsSignups AS s 
+ --    LEFT OUTER JOIN
+ --    dbo.Users AS u ON s.UserID = u.UserID ON c.EventID = s.EventID 
+ --    LEFT OUTER JOIN
+ --    dbo.EventsMaster AS m ON s.ModuleID = m.SubEventID
+     
+Where  
+(CONVERT(VARCHAR(10), c.EventTimeBegin, 101)  
+between CONVERT(VARCHAR(10), @StartDate, 101) And CONVERT(VARCHAR(10), @EndDate, 101)
+)
+       
+       and
+       (c.ModuleID = @ModuleID) --Or m.ModuleID = @ModuleID)
+       
+       
+ORDER BY c.EventTimeBegin, c.EventName
+END
+
+GO
+
+
+
+

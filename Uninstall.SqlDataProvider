@@ -1,0 +1,76 @@
+﻿/************************************************************/
+/*****              SqlDataProvider                     *****/
+/*****                                                  *****/
+/*****                                                  *****/
+/***** Note: To manually execute this script you must   *****/
+/*****       perform a search and replace operation     *****/
+/*****       for {databaseOwner} and {objectQualifier}  *****/
+/*****                                                  *****/
+/************************************************************/
+
+
+/****** Object:  StoredProcedure [dbo].[GIBS_Events_AddSignup]    Script Date: 09/25/2014 10:36:01 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GIBS_Events_AddSignup]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[GIBS_Events_AddSignup]
+GO
+
+/****** Object:  StoredProcedure [dbo].[GIBS_Events_DeleteSignup]    Script Date: 09/25/2014 10:36:01 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GIBS_Events_DeleteSignup]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[GIBS_Events_DeleteSignup]
+GO
+
+/****** Object:  StoredProcedure [dbo].[GIBS_Events_GetAvailableShifts]    Script Date: 09/25/2014 10:36:01 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GIBS_Events_GetAvailableShifts]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[GIBS_Events_GetAvailableShifts]
+GO
+
+/****** Object:  StoredProcedure [dbo].[GIBS_Events_GetAvailableSignups]    Script Date: 09/25/2014 10:36:01 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GIBS_Events_GetAvailableSignups]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[GIBS_Events_GetAvailableSignups]
+GO
+
+/****** Object:  StoredProcedure [dbo].[GIBS_Events_GetDistinctShifts]    Script Date: 09/25/2014 10:36:01 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GIBS_Events_GetDistinctShifts]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[GIBS_Events_GetDistinctShifts]
+GO
+
+/****** Object:  StoredProcedure [dbo].[GIBS_Events_GetEventSignups]    Script Date: 09/25/2014 10:36:01 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GIBS_Events_GetEventSignups]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[GIBS_Events_GetEventSignups]
+GO
+
+/****** Object:  StoredProcedure [dbo].[GIBS_Events_GetRolesByGroupID]    Script Date: 09/25/2014 10:36:01 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GIBS_Events_GetRolesByGroupID]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[GIBS_Events_GetRolesByGroupID]
+GO
+
+/****** Object:  StoredProcedure [dbo].[GIBS_Events_GetUsersByRoleName]    Script Date: 09/25/2014 10:36:01 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GIBS_Events_GetUsersByRoleName]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[GIBS_Events_GetUsersByRoleName]
+GO
+
+/****** Object:  StoredProcedure [dbo].[GIBS_Events_GetUserSignups]    Script Date: 09/25/2014 10:36:01 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GIBS_Events_GetUserSignups]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[GIBS_Events_GetUserSignups]
+GO
+
+/****** Object:  StoredProcedure [dbo].[GIBS_Events_GetVolunteerInfo]    Script Date: 09/25/2014 10:36:01 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GIBS_Events_GetVolunteerInfo]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[GIBS_Events_GetVolunteerInfo]
+GO
+
+/****** Object:  StoredProcedure [dbo].[GIBS_EventsSignupsGetAllEvents]    Script Date: 09/25/2014 10:36:01 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GIBS_EventsSignupsGetAllEvents]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[GIBS_EventsSignupsGetAllEvents]
+GO
+
+/****** Object:  StoredProcedure [dbo].[GIBS_EventsSignupsGetAllEventsShortages]    Script Date: 09/25/2014 10:36:01 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GIBS_EventsSignupsGetAllEventsShortages]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[GIBS_EventsSignupsGetAllEventsShortages]
+GO
+
+
+
+/************************************************************/
+/*****              SqlDataProvider                     *****/
+/************************************************************/

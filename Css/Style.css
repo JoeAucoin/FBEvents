@@ -1,0 +1,170 @@
+﻿
+.rgCaption
+
+   {    
+
+      color:Blue; 
+      background-color:#ccccff; 
+      font:bold 16pt Arial Narrow; 
+
+   } 
+   
+   
+  
+   .rgExpand  
+    {  
+
+      background:url('~/images/max.gif') center center no-repeat !important;       
+
+    }  
+
+   .rgCollapse  
+    {  
+
+      background:url('~/images/min.gif') center center no-repeat !important;  
+    } 
+
+
+/* ViewFBClients.aspx */
+.GridViewSearch 
+{ 
+    width:620px; 
+    margin-left:auto; 
+    margin-right:auto; 
+} 
+
+
+/* EditClient.aspx */
+.gvVisits 
+{ 
+    width:680px; 
+    margin-left:auto; 
+    margin-right:auto; 
+} 
+
+.ClientNameHeader
+{
+	    
+    font-weight: bold; 
+     font-size:14px;
+    line-height: 16px;
+    padding-bottom:10px;
+	}
+
+.ClientNameHeaderRight
+{
+	text-align: right;
+	font-weight: bold; 
+	font-size:14px;
+	line-height: 16px;
+	padding-bottom:10px;
+	z-index: 10;
+	position: absolute;
+	right: 0;
+	top: 0;
+
+	}
+.ClientNotesQuickView
+{
+	     font-size:12px;
+    line-height: 14px;
+    padding-bottom:10px;
+    color:#666666;
+	
+	}	
+	
+	
+.CheckBoxList
+{
+	    
+    font-weight: bold; 
+     font-size:11px;
+    
+    padding-right:20px;
+	}	
+	
+.CheckBoxList input 
+{ 
+    
+}
+.CheckBoxList td 
+{ 
+    padding-left: 30px; 
+}	
+	
+
+/* COMMON GRID STYLE */
+.mGrid { 
+    width: 100%; 
+    background-color: #fff; 
+    margin: 5px 0 10px 0; 
+    border: solid 1px #525252; 
+    border-collapse:collapse; 
+}
+.mGrid td { 
+    padding: 2px; 
+    border: solid 1px #c1c1c1; 
+    color: #717171; 
+    padding-left:5px;
+}
+.mGrid th { 
+    padding: 4px 2px; 
+    color: #fff; 
+    background: #3366cc ; 
+    border-left: solid 1px #525252; 
+    font-size: 0.9em; 
+}
+
+.mGrid .alt { background: #fcfcfc  }
+.mGrid .pgr { background: #3366cc  }
+.mGrid .pgr table { margin: 5px 0; }
+.mGrid .pgr td { 
+    border-width: 0; 
+    padding: 0 6px; 
+    border-left: solid 1px #666; 
+    font-weight: bold; 
+    color: #fff; 
+    line-height: 12px; 
+ }   
+.mGrid .pgr a { color: #cccccc; text-decoration: none; }
+.mGrid .pgr a:hover { color: #fff; text-decoration: none; }
+
+
+/* COMMON GRID FLEX WIDTH STYLE */
+
+.mGridFlex  
+{
+
+    width:100%; 
+    background-color: #fff; 
+    margin: 5px 0 10px 0; 
+    border: solid 1px #525252; 
+    border-collapse:collapse; 
+}
+.mGridFlex td { 
+    padding: 2px; 
+    border: solid 1px #c1c1c1; 
+    color: #717171; 
+    padding-left:5px;
+}
+.mGridFlex th { 
+    padding: 4px 2px; 
+    color: #fff; 
+    background: #3366cc ; 
+    border-left: solid 1px #525252; 
+    font-size: 0.9em; 
+}
+
+.mGridFlex .alt { background: #fcfcfc  }
+.mGridFlex .pgr { background: #3366cc  }
+.mGridFlex .pgr table { margin: 5px 0; }
+.mGridFlex .pgr td { 
+    border-width: 0; 
+    padding: 0 6px; 
+    border-left: solid 1px #666; 
+    font-weight: bold; 
+    color: #fff; 
+    line-height: 12px; 
+ }   
+.mGridFlex .pgr a { color: #cccccc; text-decoration: none; }
+.mGridFlex .pgr a:hover { color: #fff; text-decoration: none; }
