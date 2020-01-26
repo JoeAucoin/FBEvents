@@ -1,4 +1,4 @@
-# FBEvents
+# FBEvents Scheduling Tool for DNN Events Module
 FBEvents Module for DNN
 
 FBEvents is a DNN Module to enable leveraging the core DNN Events module for scheduling and reporting of volunteers for a non-profit organization.
