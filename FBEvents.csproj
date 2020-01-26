@@ -166,6 +166,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <Content Include="README.md" />
     <None Include="SqlScripts\01.00.00.SqlDataProvider" />
     <None Include="SqlScripts\01.00.01.SqlDataProvider" />
     <None Include="SqlScripts\01.00.02.SqlDataProvider" />
