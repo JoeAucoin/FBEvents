@@ -13,7 +13,7 @@ using System.Web.UI.WebControls;
 
 namespace GIBS.Modules.FBEvents
 {
-    public partial class ReportShortages : PortalModuleBase
+    public partial class ReportShortages : FBEventsSettings
     {
         static int _eventMID = 0;
 
@@ -178,17 +178,16 @@ namespace GIBS.Modules.FBEvents
             row.Cells[0].Text = values[0] + " TOTALS&nbsp;";
         }
 
-        public void LoadSettings()
+        public void GetSettings()
         {
 
             try
             {
 
-                FBEventsSettings settingsData = new FBEventsSettings(this.TabModuleId);
 
-                if (settingsData.EventMID != null)
+                if (Settings.Contains("eventMID"))
                 {
-                    _eventMID = Int32.Parse(settingsData.EventMID.ToString());
+                    _eventMID = Int32.Parse(EventMID.ToString());
 
                 }
 

@@ -18,45 +18,9 @@ namespace GIBS.FBEvents.Components
     /// <summary>
     /// Provides strong typed access to settings used by module
     /// </summary>
-    public class FBEventsSettings
+    public class FBEventsSettings : ModuleSettingsBase
     {
-        ModuleController controller;
-        int tabModuleId;
-
-        public FBEventsSettings(int tabModuleId)
-        {
-            controller = new ModuleController();
-            this.tabModuleId = tabModuleId;
-        }
-
-        protected T ReadSetting<T>(string settingName, T defaultValue)
-        {
-            Hashtable settings = controller.GetTabModuleSettings(this.tabModuleId);
-
-            T ret = default(T);
-
-            if (settings.ContainsKey(settingName))
-            {
-                System.ComponentModel.TypeConverter tc = System.ComponentModel.TypeDescriptor.GetConverter(typeof(T));
-                try
-                {
-                    ret = (T)tc.ConvertFrom(settings[settingName]);
-                }
-                catch
-                {
-                    ret = defaultValue;
-                }
-            }
-            else
-                ret = defaultValue;
-
-            return ret;
-        }
-
-        protected void WriteSetting(string settingName, string value)
-        {
-            controller.UpdateTabModuleSetting(this.tabModuleId, settingName, value);
-        }
+      
 
         #region public properties
 
@@ -64,17 +28,41 @@ namespace GIBS.FBEvents.Components
         /// get/set template used to render the module content
         /// to the user
         /// </summary>
+
+
         public string EventMID
         {
-            get { return ReadSetting<string>("eventMID", null); }
-            set { WriteSetting("eventMID", value); }
+            get
+            {
+                if (Settings.Contains("eventMID"))
+                    return Settings["eventMID"].ToString();
+                return "";
+            }
+            set
+            {
+                var mc = new ModuleController();
+                mc.UpdateTabModuleSetting(TabModuleId, "eventMID", value.ToString());
+            }
         }
+
+
 
         public string RoleGroupID
         {
-            get { return ReadSetting<string>("roleGroupID", null); }
-            set { WriteSetting("roleGroupID", value); }
+            get
+            {
+                if (Settings.Contains("roleGroupID"))
+                    return Settings["roleGroupID"].ToString();
+                return "";
+            }
+            set
+            {
+                var mc = new ModuleController();
+                mc.UpdateTabModuleSetting(TabModuleId, "roleGroupID", value.ToString());
+            }
         }
+
+
 
         #endregion
     }

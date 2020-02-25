@@ -14,7 +14,7 @@ using DotNetNuke.Entities.Profile;
 
 namespace GIBS.Modules.FBEvents
 {
-    public partial class Settings : ModuleSettingsBase
+    public partial class Settings : FBEventsSettings
     {
 
         /// <summary>
@@ -29,22 +29,21 @@ namespace GIBS.Modules.FBEvents
                 {
                     BindModules();
 
-                    FBEventsSettings settingsData = new FBEventsSettings(this.TabModuleId);
 
-                    if (settingsData.EventMID != null)
+                    if (Settings.Contains("eventMID"))
                     {
 
-                        ListItem _checkForValue = drpModuleID.Items.FindByValue(settingsData.EventMID);
+                        ListItem _checkForValue = drpModuleID.Items.FindByValue(EventMID);
                         if (_checkForValue != null)
                         {
                             // value found
-                            drpModuleID.SelectedValue = settingsData.EventMID;   
+                            drpModuleID.SelectedValue = EventMID;   
                         }
                         
                     }
-                    if (settingsData.RoleGroupID != null)
+                    if (Settings.Contains("roleGroupID"))
                     {
-                        txtRoleGroupID.Text = settingsData.RoleGroupID;
+                        txtRoleGroupID.Text = RoleGroupID;
                     }
 
                     txtProfileCheck.Text = CheckProfilePropertyExists("PrimaryJob").ToString();
@@ -180,9 +179,9 @@ namespace GIBS.Modules.FBEvents
         {
             try
             {
-                FBEventsSettings settingsData = new FBEventsSettings(this.TabModuleId);
-                settingsData.EventMID = drpModuleID.SelectedValue.ToString();
-                settingsData.RoleGroupID = txtRoleGroupID.Text.ToString();
+
+                EventMID = drpModuleID.SelectedValue.ToString();
+                RoleGroupID = txtRoleGroupID.Text.ToString();
             }
             catch (Exception ex)
             {

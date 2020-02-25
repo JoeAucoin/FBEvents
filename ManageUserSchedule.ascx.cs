@@ -14,7 +14,7 @@ using DotNetNuke.Entities.Profile;
 
 namespace GIBS.Modules.FBEvents
 {
-    public partial class ManageUserSchedule : PortalModuleBase
+    public partial class ManageUserSchedule : FBEventsSettings
     {
         static int _eventMID = 0;
         static int _roleGroupID = 0;
@@ -45,7 +45,7 @@ namespace GIBS.Modules.FBEvents
                 {
                     txtStartDate.Text = DateTime.Today.ToShortDateString();
                     txtEndDate.Text = DateTime.Today.AddDays(30).ToShortDateString();
-                    LoadSettings();
+                    GetSettings();
                     GetRoles();
                     GetUsers();
                     GetAvailableShifts();
@@ -118,28 +118,22 @@ namespace GIBS.Modules.FBEvents
 
 
 
-        public void LoadSettings()
+        public void GetSettings()
         {
 
             try
             {
 
-                FBEventsSettings settingsData = new FBEventsSettings(this.TabModuleId);
-
-                if (settingsData.RoleGroupID != null)
+                if (Settings.Contains("roleGroupID"))
                 {
-                    if (settingsData.RoleGroupID.ToString().Trim().Length > 0)
-                    {
-                        _roleGroupID = Int32.Parse(settingsData.RoleGroupID.ToString());
-                    }
+                    _roleGroupID = Int32.Parse(RoleGroupID.ToString());
 
                 }
-                if (settingsData.EventMID != null)
+                if (Settings.Contains("eventMID"))
                 {
-                    _eventMID = Int32.Parse(settingsData.EventMID.ToString());
+                    _eventMID = Int32.Parse(EventMID.ToString());
 
                 }
-
 
             }
             catch (Exception ex)

@@ -1,5 +1,5 @@
 ﻿<dotnetnuke type="Package" version="5.0">
-  <packages><package name="GIBS.FBEvents" type="Module" version="1.0.8">
+  <packages><package name="GIBS.FBEvents" type="Module" version="1.0.9">
   <friendlyName>GIBS Food Bank Schedule</friendlyName>
   <description>GIBS Food Bank Events Schedule Manager</description>
   <iconFile />
@@ -7,7 +7,7 @@
     <name>Joseph Aucoin</name>
     <organization>GIBS</organization>
     <url>www.gibs.com</url>
-    <email>jaucoin@gibs.com</email>
+    <email>webmaster@gibs.com</email>
   </owner>
   <license>&lt;h1&gt;Global Internet Business Solutions (GIBS) Custom DNN Modules&lt;/h1&gt;
 &lt;h2&gt;    END USER LICENSE AGREEMENT&lt;/h2&gt;
@@ -111,7 +111,7 @@
         </script>
         <script type="UnInstall">
           <name>Uninstall.SqlDataProvider</name>
-          <version>1.0.8</version>
+          <version>1.0.9</version>
         </script>
       </scripts>
     </component>

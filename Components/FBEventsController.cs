@@ -9,7 +9,7 @@ using DotNetNuke.Services.Search;
 
 namespace GIBS.FBEvents.Components
 {
-    public class FBEventsController : ISearchable, IPortable
+    public class FBEventsController :  IPortable
     {
 
         #region public method
@@ -81,7 +81,8 @@ namespace GIBS.FBEvents.Components
 
         public FBEventsInfo Events_GetVolunteerInfo(int userID, int portalID)
         {
-            return (FBEventsInfo)CBO.FillObject(DataProvider.Instance().Events_GetVolunteerInfo(userID, portalID), typeof(FBEventsInfo));
+   
+            return CBO.FillObject<FBEventsInfo>(DataProvider.Instance().Events_GetVolunteerInfo(userID, portalID));
         }
 
         public void Events_AddPropertyDefinition(int portalId, string propertyCategory, string propertyName)
@@ -147,31 +148,7 @@ namespace GIBS.FBEvents.Components
 
         #endregion
 
-        #region ISearchable Members
-
-        /// <summary>
-        /// Implements the search interface required to allow DNN to index/search the content of your
-        /// module
-        /// </summary>
-        /// <param name="modInfo"></param>
-        /// <returns></returns>
-        public DotNetNuke.Services.Search.SearchItemInfoCollection GetSearchItems(ModuleInfo modInfo)
-        {
-            SearchItemInfoCollection searchItems = new SearchItemInfoCollection();
-
-            //List<FBEventsInfo> infos = GetFBEventss(modInfo.ModuleID);
-
-            //foreach (FBEventsInfo info in infos)
-            //{
-            //    SearchItemInfo searchInfo = new SearchItemInfo(modInfo.ModuleTitle, info.Content, info.CreatedByUser, info.CreatedDate,
-            //                                        modInfo.ModuleID, info.ItemId.ToString(), info.Content, "Item=" + info.ItemId.ToString());
-            //    searchItems.Add(searchInfo);
-            //}
-
-            return searchItems;
-        }
-
-        #endregion
+       
 
         #region IPortable Members
 

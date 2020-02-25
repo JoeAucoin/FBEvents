@@ -13,7 +13,7 @@ using System.Web.UI.WebControls;
 
 namespace GIBS.Modules.FBEvents
 {
-    public partial class ReportSchedule : PortalModuleBase
+    public partial class ReportSchedule : FBEventsSettings
     {
 
 
@@ -34,7 +34,7 @@ namespace GIBS.Modules.FBEvents
                 {
                     txtStartDate.Text = DateTime.Today.ToShortDateString();
                     txtEndDate.Text = DateTime.Today.AddDays(30).ToShortDateString();
-                    LoadSettings();
+                    GetSettings();
                     GroupIt();
                     Fill_Report();
 
@@ -196,17 +196,15 @@ namespace GIBS.Modules.FBEvents
 
 
 
-        public void LoadSettings()
+        public void GetSettings()
         {
 
             try
             {
 
-                FBEventsSettings settingsData = new FBEventsSettings(this.TabModuleId);
-
-                if (settingsData.EventMID != null)
+                if (Settings.Contains("eventMID"))
                 {
-                    _eventMID = Int32.Parse(settingsData.EventMID.ToString());
+                    _eventMID = Int32.Parse(EventMID.ToString());
 
                 }
                
